@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 // import uuid from 'uuid';
 import axios from 'axios';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
-import Todos from './components/Todos';
-import AddTodo from './components/AddTodo';
-import About  from './components/pages/About';
+// import Todos from './components/Todos';
+import About from './components/pages/About';
 import './App.css';
+import AddBlogPost from './components/AddBlogPost';
 
 class App extends Component {
   state = {
@@ -14,10 +14,10 @@ class App extends Component {
   };
 
   // fetch data
-  componentDidMount(){
+  componentDidMount() {
     axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
-    .then(res => this.setState({ todos: res.data}))
-  } 
+      .then(res => this.setState({ todos: res.data }))
+  }
 
   markComplete = id => {
     this.setState({
@@ -32,24 +32,23 @@ class App extends Component {
 
   deleteTodo = id => {
     axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-    .then(res => {
-      if(res){
-        this.setState({
-           todos: this.state.todos.filter(todo => todo.id !== id)
-        });
-      }
-    })
+      .then(res => {
+        if (res) {
+          this.setState({
+            todos: this.state.todos.filter(todo => todo.id !== id)
+          });
+        }
+      })
     // this.setState({
     //   todos: this.state.todos.filter(todo => todo.id !== id)
     // });
   };
 
-  addTodo = title => {
-   // Using an API
-    axios.post("https://jsonplaceholder.typicode.com/todos", {
-        title,
-        completed: false
-      })
+  addBlogPost = data => {
+    // Using an API
+    axios.post("https://jsonplaceholder.typicode.com/posts", {
+      ...data,
+    })
       .then(res =>
         this.setState({ todos: [...this.state.todos, res.data] })
       );
@@ -61,24 +60,24 @@ class App extends Component {
 
   render() {
     return <Router>
-        <div className="app">
-          <div className="container">
-            <Header />
-            
-            <Route exact path="/" render={props => (
-                 <React.Fragment>
-                      <AddTodo addTodo={this.addTodo} />
-                      <Todos todos={this.state.todos} markComplete={this.markComplete} deleteTodo={this.deleteTodo} />
-                 </React.Fragment>
-             )} />
+      <div className="app">
+        <div className="container">
+          <Header />
 
-             <Route path="/about" component={About}>
+          <Route exact path="/" render={props => (
+            <React.Fragment>
+              <AddBlogPost addBlogPost={this.addBlogPost} />
+              {/* <Todos todos={this.state.todos} markComplete={this.markComplete} deleteTodo={this.deleteTodo} /> */}
+            </React.Fragment>
+          )} />
 
-             </Route>
+          <Route path="/about" component={About}>
 
-           </div>
+          </Route>
+
         </div>
-      </Router>
+      </div>
+    </Router>
   }
 }
 

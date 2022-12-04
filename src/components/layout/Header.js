@@ -6,7 +6,7 @@ function Header () {
     
     return(
         <div style={style()}>
-           <h1>Todo App</h1>
+           <h1>Blog App</h1>
            <Link style={ linkStyle } to="/">Home</Link> : <Link to="/about">About</Link>
         </div>
     ) 
